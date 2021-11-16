@@ -76,7 +76,7 @@ SERVER = config['WEATHERBIT_URL']
 HEADERS = {}
 WEATHERBIT_COUNTRY = config['WEATHERBIT_COUNTRY']
 WEATHERBIT_LANG = config['WEATHERBIT_LANGUAGE']
-WEATHERBIT_POSTALCODE = config['WEATHERBIT_POSTALCODE']
+WEATHERBIT_CITY_ID = config['WEATHERBIT_CITY_ID']
 WEATHERBIT_HOURS = config['WEATHERBIT_HOURS']
 WEATHERBIT_DAYS = config['WEATHERBIT_DAYS']
 METRIC = config['LOCALE']['METRIC']
@@ -103,7 +103,7 @@ try:
             os.putenv('SDL_FBDEV', config['DISPLAY']['FRAMEBUFFER'])
             os.environ["SDL_VIDEODRIVER"] = "fbcon"
 
-        LOG_PATH = '/mnt/ramdisk/'
+        LOG_PATH = ''
         WEATHERBIT_IO_KEY = config['WEATHERBIT_IO_KEY']
 
     logger.info(f"STARTING IN {config['ENV']} MODE")
@@ -537,14 +537,17 @@ class Update(object):
 
             logger.info(f'connecting to server: {SERVER}')
 
-            options = str(f'&postal_code={WEATHERBIT_POSTALCODE}'
+            options = str(f'&city_id={WEATHERBIT_CITY_ID}'
                           f'&country={WEATHERBIT_COUNTRY}'
                           f'&lang={WEATHERBIT_LANG}'
                           f'&units={units}')
 
             current_request_url = str(f'{current_endpoint}?key={WEATHERBIT_IO_KEY}{options}')
+            logger.info(f'connecting to server: {current_request_url}')
             daily_request_url = str(f'{daily_endpoint}?key={WEATHERBIT_IO_KEY}{options}&days={WEATHERBIT_DAYS}')
+            logger.info(f'connecting to server: {daily_request_url}')
             stats_request_url = str(f'{stats_endpoint}?key={WEATHERBIT_IO_KEY}')
+            logger.info(f'connecting to server: {stats_request_url}')
 
             current_data = requests.get(current_request_url, headers=HEADERS).json()
             daily_data = requests.get(daily_request_url, headers=HEADERS).json()
