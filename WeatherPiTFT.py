@@ -64,7 +64,7 @@ ch.setFormatter(formatter)
 # add ch to logger
 logger.addHandler(ch)
 
-config_data = open(PATH + 'config.json').read()
+config_data = open(PATH + 'config.json', encoding="utf-8").read()
 config = json.loads(config_data)
 
 theme_config = config["THEME"]
@@ -82,6 +82,12 @@ WEATHERBIT_DAYS = config['WEATHERBIT_DAYS']
 METRIC = config['LOCALE']['METRIC']
 
 locale.setlocale(locale.LC_ALL, (config['LOCALE']['ISO'], 'UTF-8'))
+#locale.locale_alias
+
+#if sys.platform == 'win32':
+#    locale.setlocale(locale.LC_ALL, 'ukr_ukr')
+#else:
+#    locale.setlocale(locale.LC_ALL, 'uk_UA.UTF-8')
 
 THREADS = []
 
@@ -732,7 +738,12 @@ class Update(object):
         wind_direction = str(current_forecast['wind_cdir'])
         wind_speed = float(current_forecast['wind_spd'])
         wind_speed = wind_speed * 3.6 if METRIC else wind_speed
-        wind_speed_unit = 'km/h' if METRIC else 'mph'
+        #if sys.platform == 'win32':
+#    locale.setlocale(locale.LC_ALL, 'ukr_ukr')
+#else:
+#    locale.setlocale(locale.LC_ALL, 'uk_UA.UTF-8')
+#        wind_speed_unit = 'km/h' if METRIC else 'mph'
+        wind_speed_unit = 'км/г' if METRIC else 'mph'
         wind_speed_string = str(f'{round(wind_speed, 1)} {wind_speed_unit}')
 
         global weather_surf, UPDATING
